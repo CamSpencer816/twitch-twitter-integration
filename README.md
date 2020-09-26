@@ -9,3 +9,7 @@ Combining Twitch and Twitter APIs to automate various tasks
 
 1. Install dependencies with `npm install`
 1. Run `node tasks/IsChannelLive.js --clientId "{INSERT-YOUR-CLIENT-ID}" --clientSecret "{INSERT-YOUR-CLIENT-SECRET}" --channelName "CHANNEL-TO-CHECK"`
+
+## Getting Twitch Credentials
+
+To Do
