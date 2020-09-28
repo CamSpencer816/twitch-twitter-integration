@@ -39,9 +39,9 @@ async function isChannelLive() {
             if (channelDetails[i].display_name.toLowerCase() == channelName.toLowerCase()) {
                 console.log("Checking if the channel is live...");
                 if (channelDetails[i].is_live == true) {
-                    console.log("The channel is live!");
+                    console.log("The channel [" + channelName + "] is live!");
                 } else {
-                    console.log("The channel is offline.");
+                    console.log("The channel [" + channelName + "] is offline.");
                 }
             }
         }
