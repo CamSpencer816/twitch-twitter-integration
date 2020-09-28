@@ -1,4 +1,4 @@
-const TwitchApi = require('../../api/TwitchApi');
+const TwitchTasks = require('../../tasks/TwitchTasks');
 
 module.exports = async function (context, req) {
 
@@ -15,45 +15,19 @@ module.exports = async function (context, req) {
         context.done();
     }
 
-    const twitchApi = new TwitchApi();
+    const twitchTasks = new TwitchTasks();
+    const isChannelLive = await twitchTasks.isChannelLive(clientId, clientSecret, channelName);
 
-    console.log("Authenticating oAuth credentials for Twitch...");
-    const accessToken = await twitchApi.getAccessToken(clientId, clientSecret);
-
-    console.log("Searching for channel [" + channelName + "]...");
-    const channelDetails = await twitchApi.searchChannels(channelName, accessToken, clientId);
-
-    if (channelDetails.length === 0) {
+    if (isChannelLive) {
         context.res = {
             status: 200,
-            body: "Couldn't find any channels that matched [" + channelName + "]..."
+            body: "The channel [" + channelName + "] is live!"
         };
         context.done();
     } else {
-        // The search query will return similarly named channels, so we need to find the exact match
-        console.log("Checking for a channel with an exact name match for [" + channelName + "]...");
-        for (let i = 0; i < channelDetails.length; i++) {
-            if (channelDetails[i].display_name.toLowerCase() == channelName.toLowerCase()) {
-                console.log("Checking if the channel is live...");
-                if (channelDetails[i].is_live == true) {
-                    context.res = {
-                        status: 200,
-                        body: "The channel [" + channelName + "] is live!"
-                    };
-                    context.done();
-                } else {
-                    context.res = {
-                        status: 200,
-                        body: "The channel [" + channelName + "] is offline."
-                    };
-                    context.done();
-                }
-            }
-        }
-        // It could be that we found close but not exact matches and looped through everything without finding our channel
         context.res = {
             status: 200,
-            body: "Couldn't find any channels that matched [" + channelName + "]..."
+            body: "The channel [" + channelName + "] is offline."
         };
         context.done();
     }
