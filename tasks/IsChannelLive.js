@@ -46,6 +46,6 @@ async function isChannelLive() {
             }
         }
     }
-} //making a new change
+}
 
 isChannelLive()
