@@ -46,6 +46,6 @@ async function isChannelLive() {
             }
         }
     }
-} *i am making a change*
+} //making a new change
 
 isChannelLive()
