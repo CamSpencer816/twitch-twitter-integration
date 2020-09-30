@@ -1,0 +1,67 @@
+# Automatically trigger a build for a pull request (PR) going INTO these branches
+pr:
+  branches:
+    include:
+      - master
+
+# Trigger a new build when there are pushed changes for these branches (this includes creating a branch)
+trigger:
+  branches:
+    include:
+      - master
+
+# Build Number
+name: $(date:yyyy.M.d)$(rev:.r)
+
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: UseNode@1
+            displayName: "Node: Tool Install"
+            inputs:
+              version: "12.18.2"
+
+          - task: Npm@1
+            displayName: "NPM: CI"
+            inputs:
+              command: ci
+              workingDir: "$(Build.SourcesDirectory)"
+
+          - task: ArchiveFiles@2
+            displayName: "Archive Files: Working Dir"
+            inputs:
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip
+              replaceExistingArchive: true
+
+          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip
+            artifact: drop
+
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Build
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        environment: production
+        pool:
+          vmImage: "ubuntu-latest"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureFunctionApp@1
+                  displayName: "Azure Functions App Deploy: twitch-twitter-integration-func"
+                  inputs:
+                    azureSubscription: "Pay-As-You-Go"
+                    appType: "functionAppLinux"
+                    appName: "twitch-twitter-integration-func"
+                    package: "$(Pipeline.Workspace)/drop/$(Build.BuildNumber).zip"
