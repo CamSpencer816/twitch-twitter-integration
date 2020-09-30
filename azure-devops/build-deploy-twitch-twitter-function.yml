@@ -1,3 +1,4 @@
+# Don't build for Pull Requests
 pr: none
 
 # Trigger a new build when there are pushed changes for these branches (this includes creating a branch)
@@ -44,6 +45,8 @@ stages:
   - stage: Deploy
     displayName: Deploy
     dependsOn: Build
+    # Deploy all builds of master except for pull request triggers
+    condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
     jobs:
       - deployment: Deploy
         displayName: Deploy
@@ -61,3 +64,4 @@ stages:
                     appType: "functionAppLinux"
                     appName: "twitch-twitter-integration-func"
                     package: "$(Pipeline.Workspace)/drop/$(Build.BuildNumber).zip"
+                    deploymentMethod: "zipDeploy"
