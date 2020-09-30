@@ -1,4 +1,4 @@
-const TwitchTasks = require('../../tasks/TwitchTasks');
+const TwitchTasks = require('../tasks/TwitchTasks');
 
 module.exports = async function (context, req) {
 

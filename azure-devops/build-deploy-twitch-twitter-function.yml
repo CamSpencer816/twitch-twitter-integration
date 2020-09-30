@@ -28,12 +28,12 @@ stages:
             displayName: "NPM: CI"
             inputs:
               command: ci
-              workingDir: "$(Build.SourcesDirectory)"
+              workingDir: "$(Build.SourcesDirectory)/azure-function"
 
           - task: ArchiveFiles@2
-            displayName: "Archive Files: Working Dir"
+            displayName: "Archive Files: Azure-Function"
             inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/azure-function"
               includeRootFolder: false
               archiveType: zip
               archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip
@@ -46,7 +46,7 @@ stages:
     displayName: Deploy
     dependsOn: Build
     # Deploy all builds of master except for pull request triggers
-    condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
+    # condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
     jobs:
       - deployment: Deploy
         displayName: Deploy
@@ -58,7 +58,7 @@ stages:
             deploy:
               steps:
                 - task: AzureFunctionApp@1
-                  displayName: "Azure Functions App Deploy: twitch-twitter-integration-func"
+                  displayName: "Azure Functions App: Twitch/Twitter Integration Function"
                   inputs:
                     azureSubscription: "Pay-As-You-Go"
                     appType: "functionAppLinux"
