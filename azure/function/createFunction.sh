@@ -2,10 +2,10 @@
 set -Ee
 
 APP_INSIGHTS="twitch-twitter-integration-ai"
-CONSUPMOTION_PLAN_LOCATION="canadacentral"
 FUNCTIONS_VERSION="3"
 NAME="twitch-twitter-integration-func"
 OS_TYPE="Linux"
+PLAN="twitch-twitter-integration-asp"
 RESOURCE_GROUP="twitch-twitter-integration-rg"
 RUNTIME="node"
 STORAGE_ACCOUNT="twitchtwitterintsa"
@@ -23,10 +23,10 @@ echo "Creating the Function [${NAME}] in [${RESOURCE_GROUP}]..."
 
 az functionapp create \
     --app-insights-key "${APP_INSIGHTS_INSTRUMENTATION_KEY}" \
-    --consumption-plan-location "${CONSUPMOTION_PLAN_LOCATION}" \
     --functions-version "${FUNCTIONS_VERSION}" \
     --name "${NAME}" \
     --os-type ${OS_TYPE} \
-    --resource-group "${RESOURCE_GROUP}" \
+    --plan "${PLAN}"
+--resource-group "${RESOURCE_GROUP}" \
     --runtime "${RUNTIME}" \
     --storage-account "${STORAGE_ACCOUNT}"
