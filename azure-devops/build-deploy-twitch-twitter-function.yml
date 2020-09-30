@@ -1,8 +1,4 @@
-# Automatically trigger a build for a pull request (PR) going INTO these branches
-pr:
-  branches:
-    include:
-      - master
+pr: none
 
 # Trigger a new build when there are pushed changes for these branches (this includes creating a branch)
 trigger:
