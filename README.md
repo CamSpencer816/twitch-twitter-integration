@@ -7,7 +7,7 @@ Combining Twitch and Twitter APIs to automate various tasks with Azure Functions
 * [Twitch Developer Application](https://dev.twitch.tv/console/apps)
 
 ## Build Status
-[![Build Status](https://dev.azure.com/CamSpencer816/Twitch%20Twitter%20Integration/_apis/build/status/Build%20and%20Deploy%20Twitch%20Twitter%20Function?branchName=feature%2Fadd-azure-function)](https://dev.azure.com/CamSpencer816/Twitch%20Twitter%20Integration/_build/latest?definitionId=1&branchName=feature%2Fadd-azure-function)
+[![Build Status](https://dev.azure.com/CamSpencer816/Twitch%20Twitter%20Integration/_apis/build/status/Build%20and%20Deploy%20Twitch%20Twitter%20Function?branchName=master)](https://dev.azure.com/CamSpencer816/Twitch%20Twitter%20Integration/_build/latest?definitionId=1&branchName=master)
 
 ## Folder/File Organization
 * `azure`: Bash scripts used to setup and configure the Azure resources
