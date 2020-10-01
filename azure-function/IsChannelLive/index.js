@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
     if (channelName === undefined || channelName === "") {
         context.res = {
             status: 400,
-            body: "No channel name was passed to the function."
+            body: "No channel name was passed to the function. Please pass the query parameter [name]."
         };
 
         context.done();
