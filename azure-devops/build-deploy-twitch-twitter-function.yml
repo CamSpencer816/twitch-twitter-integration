@@ -46,7 +46,7 @@ stages:
     displayName: Deploy
     dependsOn: Build
     # Deploy all builds of master except for pull request triggers
-    condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
+    # condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
     jobs:
       - deployment: Deploy
         displayName: Deploy
@@ -58,10 +58,10 @@ stages:
             deploy:
               steps:
                 - task: AzureFunctionApp@1
-                  displayName: "Azure Functions App: Twitch/Twitter Integration Function"
+                  displayName: "Azure Functions App: Twitch/Twitter Central US Function"
                   inputs:
                     azureSubscription: "Pay-As-You-Go"
                     appType: "functionAppLinux"
-                    appName: "twitch-twitter-integration-func"
+                    appName: "twitch-twitter-central-us-func"
                     package: "$(Pipeline.Workspace)/drop/$(Build.BuildNumber).zip"
                     deploymentMethod: "zipDeploy"
