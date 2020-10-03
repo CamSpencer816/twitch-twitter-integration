@@ -23,7 +23,7 @@ Combining Twitch and Twitter APIs to automate various tasks with Azure Functions
 1. Make `GET` requests to http://localhost:7071/api/IsChannelLive with optional query parameter `name`. Ex http://localhost:7071/api/IsChannelLive?name=ChannelName
 
 ## How To Run - Azure
-Make `GET` requests to https://twitch-twitter-integration-func.azurewebsites.net/api/IsChannelLive with the query parameter `name`. Ex https://twitch-twitter-integration-func.azurewebsites.net/api/IsChannelLive?name=ChannelName
+Make `GET` requests to https://twitch-twitter-central-us-func.azurewebsites.net/api/IsChannelLive with the query parameter `name`. Ex https://twitch-twitter-central-us-func.azurewebsites.net/api/IsChannelLive?name=ChannelName
 
 ## Creating Azure Resources
 1. [Create an Azure account](https://azure.microsoft.com/en-ca/free/)

@@ -17,17 +17,18 @@ class TwitchApi {
      * @returns {string} oAuth token to be used in the Authorization header for future requests
      */
     async getAccessToken(clientId, clientSecret) {
+        console.log('Authenticating oAuth credentials for Twitch...');
         return new Promise(resolve => {
             request
                 .post('https://id.twitch.tv/oauth2/token')
-                .send('client_id=' + clientId)
-                .send('client_secret=' + clientSecret)
+                .send(`client_id=${clientId}`)
+                .send(`client_secret=${clientSecret}`)
                 .send('grant_type=client_credentials')
                 .then(function (res) {
-                    console.log('Authenticated.');
+                    console.log('Authenticated!');
                     resolve(res.body.access_token);
                 }).catch(function (err) {
-                    console.error('Error [' + err.message + ']');
+                    console.error(`Error [${err.message} ]`);
                     console.error(JSON.stringify(err.response));
                 })
         })
@@ -41,16 +42,17 @@ class TwitchApi {
      * @returns {JSON} A JSON object with all the channels that match the search query
      */
     async searchChannels(channelName, accessToken, clientId) {
+        console.log(`Searching for channel [${channelName}]...`);
         return new Promise(resolve => {
             request
-                .get('https://api.twitch.tv/helix/search/channels?query=' + channelName)
-                .set('Authorization', 'Bearer ' + accessToken)
+                .get(`https://api.twitch.tv/helix/search/channels?query=${channelName}`)
+                .set('Authorization', `Bearer ${accessToken}`)
                 .set('client-id', clientId)
                 .then(function (res) {
-                    console.log('Found at least one match for the channel.');
+                    console.log(`Search results returned for the channel [${channelName}]!`);
                     resolve(res.body.data);
                 }).catch(function (err) {
-                    console.error('Error [' + err.message + ']');
+                    console.error(`Error [${err.message} ]`);
                     console.error(JSON.stringify(err.response));
                 })
         })
