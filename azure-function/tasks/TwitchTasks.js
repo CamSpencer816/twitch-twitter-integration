@@ -5,23 +5,21 @@ const TwitchApi = require('../api/TwitchApi');
  */
 class TwitchTasks {
 
-    constructor() {
-        this._twitchApi = new TwitchApi();
+    constructor(clientId, clientSecret) {
+        this._twitchApi = new TwitchApi(clientId, clientSecret);
     }
 
     /**
      * Search for a given channel and return the details for the first exact match
-     * @param {string} clientId The app's client ID - https://dev.twitch.tv/console/apps
-     * @param {string} clientSecret The app's client Secret - https://dev.twitch.tv/console/apps
      * @param {string} channelName The channel name to pull the details of
      * @returns {any} The JSON object for a channel with an exact (toLowerCase) name match; undefined if no match was made
      */
-    async getChannelDetails(clientId, clientSecret, channelName) {
+    async getChannelDetails(channelName) {
         console.log(`Getting the channel details for [${channelName}]...`);
 
-        const accessToken = await this._twitchApi.getAccessToken(clientId, clientSecret);
+        const accessToken = await this._twitchApi.getAccessToken();
 
-        const channels = await this._twitchApi.searchChannels(channelName, accessToken, clientId);
+        const channels = await this._twitchApi.searchChannels(channelName, accessToken);
 
         if (channels.length !== 0) {
             // The search query will return similarly named channels, so we need to find the exact match
@@ -39,14 +37,12 @@ class TwitchTasks {
 
     /**
      * Check if a given Twitch channel is live
-     * @param {string} clientId The app's client ID - https://dev.twitch.tv/console/apps
-     * @param {string} clientSecret The app's client Secret - https://dev.twitch.tv/console/apps
      * @param {string} channelName The channel name to check if they are live
      * @returns {boolean} True if a channel with an exact (toLowerCase) name match is live; False otherwise
      */
-    async isChannelLive(clientId, clientSecret, channelName) {
+    async isChannelLive(channelName) {
         console.log(`Checking if the channel [${channelName}] is live...`);
-        const channelDetails = await this.getChannelDetails(clientId, clientSecret, channelName);
+        const channelDetails = await this.getChannelDetails(channelName);
 
         if (channelDetails !== undefined && channelDetails.is_live == true) {
             console.log(`The channel [${channelName}] is live!`);

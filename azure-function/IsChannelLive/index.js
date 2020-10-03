@@ -15,8 +15,8 @@ module.exports = async function (context, req) {
         context.done();
     }
 
-    const twitchTasks = new TwitchTasks();
-    const isChannelLive = await twitchTasks.isChannelLive(clientId, clientSecret, channelName);
+    const twitchTasks = new TwitchTasks(clientId, clientSecret);
+    const isChannelLive = await twitchTasks.isChannelLive(channelName);
 
     if (isChannelLive) {
         context.res = {
