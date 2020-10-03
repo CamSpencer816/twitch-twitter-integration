@@ -1,7 +1,7 @@
 # Exit early upon errors
 set -Ee
 
-ALWAYS_ON="true"
+ALWAYS_ON="false"
 NAME="twitch-twitter-integration-func"
 RESOURCE_GROUP="twitch-twitter-integration-rg"
 

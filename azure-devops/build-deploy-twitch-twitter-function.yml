@@ -46,7 +46,7 @@ stages:
     displayName: Deploy
     dependsOn: Build
     # Deploy all builds of master except for pull request triggers
-    # condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
+    condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
     jobs:
       - deployment: Deploy
         displayName: Deploy

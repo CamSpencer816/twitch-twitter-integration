@@ -29,8 +29,7 @@ Make `GET` requests to https://twitch-twitter-integration-func.azurewebsites.net
 1. [Create an Azure account](https://azure.microsoft.com/en-ca/free/)
 1. Create a `Resource Group`. Ex `twitch-twitter-integration-rg`
 1. Create a new `Function`. Ex `twitch-twitter-integration-func`
-    1. Select `Linux` and `Canada Central`
-    1. Create a new `App Service Plan` using `Premium`. Ex `twitch-twitter-integration-asp`
+    1. Select `Linux` and `East US` (At time of writting, `Canada Central` does not have `Consumption Linux` available)
     1. Create a new `Storage Account`. Ex `twitchtwitterintsa` - *NOTE* `Storage Account` resources have stricter naming rules
     1. *Optional* Create a new `App Insights`. Ex. `twitch-twitter-integration-ai`
 1. Configure additional `Application Settings`

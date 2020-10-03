@@ -1,7 +1,7 @@
 # Exit early upon errors
 set -Ee
 
-LOCATION="canadacentral"
+LOCATION="eastus"
 NAME="twitch-twitter-integration-rg"
 
 echo "Creating the Resource Group [${NAME}]..."

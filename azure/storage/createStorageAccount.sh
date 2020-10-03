@@ -2,7 +2,7 @@
 set -Ee
 
 KIND="StorageV2"
-LOCATION="canadacentral"
+LOCATION="eastus"
 NAME="twitchtwitterintsa"
 RESOURCE_GROUP="twitch-twitter-integration-rg"
 SHARED_ENVIRONMENT="devtest"
