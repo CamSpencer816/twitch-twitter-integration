@@ -1,0 +1,67 @@
+# Don't build for Pull Requests
+pr: none
+
+# Trigger a new build when there are pushed changes for these branches (this includes creating a branch)
+trigger:
+  branches:
+    include:
+      - master
+
+# Build Number
+name: $(date:yyyy.M.d)$(rev:.r)
+
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: UseNode@1
+            displayName: "Node: Tool Install"
+            inputs:
+              version: "12.18.2"
+
+          - task: Npm@1
+            displayName: "NPM: CI"
+            inputs:
+              command: ci
+              workingDir: "$(Build.SourcesDirectory)/azure-function"
+
+          - task: ArchiveFiles@2
+            displayName: "Archive Files: Azure-Function"
+            inputs:
+              rootFolderOrFile: "$(System.DefaultWorkingDirectory)/azure-function"
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip
+              replaceExistingArchive: true
+
+          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip
+            artifact: drop
+
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Build
+    # Deploy all builds of master except for pull request triggers
+    condition: and(succeeded(), and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.Reason'], 'PullRequest')))
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy
+        environment: production
+        pool:
+          vmImage: "ubuntu-latest"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureFunctionApp@1
+                  displayName: "Azure Functions App: Twitch/Twitter Central US Function"
+                  inputs:
+                    azureSubscription: "Pay-As-You-Go"
+                    appType: "functionAppLinux"
+                    appName: "twitch-twitter-central-us-func"
+                    package: "$(Pipeline.Workspace)/drop/$(Build.BuildNumber).zip"
+                    deploymentMethod: "zipDeploy"
