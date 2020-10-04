@@ -36,6 +36,40 @@ class TwitchTasks {
     }
 
     /**
+     * Gets the start time of a channel's steam
+     * @param {string} channelName The channel name to check if they are live
+     * @returns {string} The start time as UTC if the channel is live or an empty string if the channel is offline;
+     * Undefined if no channel details were returned
+     */
+    async getStreamStartTime(channelName) {
+        console.log(`Getting the start time for the stream of the channel [${channelName}]...`);
+        const channelDetails = await this.getChannelDetails(channelName);
+
+        console.log(`Getting the stream start time for the channel ${channelName}...`);
+        if (channelDetails !== undefined) {
+            return channelDetails.started_at;
+        }
+        return undefined;
+    }
+
+    /**
+     * Get the title of the current or previous stream for a channel
+     * @param {string} channelName The channel name to check if they are live
+     * @returns {string} The title of the current stream, or the last stream the channel had;
+     * Undefined if no channel details were returned
+     */
+    async getStreamTitle(channelName) {
+        console.log(`Getting the stream title for the channel [${channelName}]...`);
+        const channelDetails = await this.getChannelDetails(channelName);
+
+        console.log(`Getting the stream title for the channel ${channelName}...`);
+        if (channelDetails !== undefined) {
+            return channelDetails.title;
+        }
+        return undefined;
+    }
+
+    /**
      * Check if a given Twitch channel is live
      * @param {string} channelName The channel name to check if they are live
      * @returns {boolean} True if a channel with an exact (toLowerCase) name match is live; False otherwise
@@ -50,6 +84,31 @@ class TwitchTasks {
         } else {
             console.log(`The channel [${channelName}] is offline!`);
         }
+        return false;
+    }
+
+    /**
+     * 
+     * @param {string} channelName The channel name to check if they are live
+     * @param {number} thresholdInMilliseconds The time (in milliseconds) that the stream must
+     *  have started within to be considered "fresh"
+     * @returns {boolean} True if the stream start time is within the threshold; False otherwise
+     */
+    async isStreamFresh(channelName, thresholdInMilliseconds) {
+        console.log(`Checking if the stream for the channel [${channelName}] started within [${thresholdInMilliseconds}] milliseconds...`);
+        const streamStartTimeAsString = await this.getStreamStartTime(channelName);
+
+        if (streamStartTimeAsString !== undefined) {
+            const streamStartTimeAsEpoch = Date.parse(streamStartTimeAsString);
+            const currentTimeAsEpoch = Date.now();
+            const millisecondsSinceStreamStart = currentTimeAsEpoch - streamStartTimeAsEpoch;
+
+            if (millisecondsSinceStreamStart <= thresholdInMilliseconds) {
+                console.log(`The steam for the channel [${channelName}] is fresh!`);
+                return true;
+            }
+        }
+        console.log(`The steam for the channel [${channelName}] is stale!`);
         return false;
     }
 }
