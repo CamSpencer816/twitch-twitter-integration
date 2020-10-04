@@ -2,8 +2,8 @@ const TwitchTasks = require('../tasks/TwitchTasks');
 
 module.exports = async function (context, req) {
 
-    const clientId = process.env.TWITCH_API_CLIENT_ID
-    const clientSecret = process.env.TWITCH_API_CLIENT_SECRET
+    const clientId = process.env.TWITCH_API_CLIENT_ID;
+    const clientSecret = process.env.TWITCH_API_CLIENT_SECRET;
     const channelName = (req.query.name || process.env.TWITCH_CHANNEL);
 
     if (channelName === undefined || channelName === "") {
@@ -15,8 +15,8 @@ module.exports = async function (context, req) {
         context.done();
     }
 
-    const twitchTasks = new TwitchTasks();
-    const isChannelLive = await twitchTasks.isChannelLive(clientId, clientSecret, channelName);
+    const twitchTasks = new TwitchTasks(clientId, clientSecret);
+    const isChannelLive = await twitchTasks.isChannelLive(channelName);
 
     if (isChannelLive) {
         context.res = {
