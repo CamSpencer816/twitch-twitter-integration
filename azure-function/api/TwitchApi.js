@@ -32,7 +32,7 @@ class TwitchApi {
                     console.log('Authenticated!');
                     resolve(res.body.access_token);
                 }).catch(function (err) {
-                    console.error(`Error [${err.message} ]`);
+                    console.error(`Error [${err.message}]`);
                     console.error(JSON.stringify(err.response));
                 })
         })
@@ -55,7 +55,7 @@ class TwitchApi {
                     console.log(`Search results returned for the channel [${channelName}]!`);
                     resolve(res.body.data);
                 }).catch(function (err) {
-                    console.error(`Error [${err.message} ]`);
+                    console.error(`Error [${err.message}]`);
                     console.error(JSON.stringify(err.response));
                 })
         })
