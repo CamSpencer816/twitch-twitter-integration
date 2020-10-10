@@ -1,4 +1,5 @@
 const TwitchTasks = require('../tasks/TwitchTasks');
+const TwitterTasks = require('../tasks/TwitterTasks');
 
 module.exports = async function (context, myTimer) {
     var timeStamp = new Date().toISOString();
@@ -9,8 +10,9 @@ module.exports = async function (context, myTimer) {
 
     const clientId = process.env.TWITCH_API_CLIENT_ID;
     const clientSecret = process.env.TWITCH_API_CLIENT_SECRET;
-    const channelName = process.env.TWITCH_CHANNEL;
+    const twitchTasks = new TwitchTasks(clientId, clientSecret);
 
+    const channelName = process.env.TWITCH_CHANNEL;
     if (channelName === undefined || channelName === "") {
         context.res = {
             status: 400,
@@ -20,7 +22,6 @@ module.exports = async function (context, myTimer) {
         context.done();
     }
 
-    const twitchTasks = new TwitchTasks(clientId, clientSecret);
     const isChannelLive = await twitchTasks.isChannelLive(channelName);
 
     if (isChannelLive) {
@@ -32,7 +33,17 @@ module.exports = async function (context, myTimer) {
 
         if (isStreamFresh) {
 
-            // TODO - Constructuct message and send tweet
+            const consumerKey = process.env.TWITTER_CONSUMER_KEY;
+            const consumerSecret = process.env.TWITTER_CONSUMER_SECRET;
+            const accessTokenKey = process.env.TWITTER_ACCESS_TOKEN_KEY;
+            const accessTokenSecret = process.env.TWITTER_ACCESS_TOKEN_SECRET;
+            const twitterTasks = new TwitterTasks(consumerKey, consumerSecret, accessTokenKey, accessTokenSecret);
+
+            const streamStartTime = await twitchTasks.getStreamStartTime(channelName);
+            const streamStartTimeFormatted = new Date(streamStartTime).toLocaleString();
+            const twitterStatus = `${channelName} started a new stream, check it out at https://www.twitch.tv/${channelName}! Stream start time: ${streamStartTimeFormatted}`
+
+            await twitterTasks.updateStatus(twitterStatus);
 
             context.res = {
                 status: 200,

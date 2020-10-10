@@ -7,6 +7,7 @@ Combining Twitch and Twitter APIs to automate various tasks with Azure Functions
 - [Node v12 (or later)](https://nodejs.org/en/download/)
 - [Azure Function Core Tools v3 (or later)](https://www.npmjs.com/package/azure-functions-core-tools)
 - [Twitch Developer Application](https://dev.twitch.tv/console/apps)
+- [Twitter Developer Application] (https://developer.twitter.com/en/portal/dashboard)
 
 ## Build Status
 
@@ -18,7 +19,10 @@ Combining Twitch and Twitter APIs to automate various tasks with Azure Functions
 - `azure-devops`: Continuous integration and delivery pipelines for Azure DevOps
 - `azure-function`: Perform custom actions with simple endpoints
 - `azure-function/api`: Classes that manage APIs to external endpoints
+- `azure-function/is-channel-live`: GET - Determine if a given Twitch channel is live
 - `azure-function/tasks`: Classes that combine APIs to perform custom actions
+- `azure-function/tweet-if-channel-is-live`: GET - Send out a Tweet if a given Twitch channel is streaming
+- `azure-function/tweet-if-fresh-stream-started`: CRON - Send out a Tweet if a given Twitch channel is streaming since the last function run
 
 ## How To Run - Local
 
@@ -43,8 +47,12 @@ Make `GET` requests to https://twitch-twitter-central-us-func.azurewebsites.net/
    1. `TWITCH_API_CLIENT_ID` - Your cliend ID for your registered Twitch app
    1. `TWITCH_API_CLIENT_SECRET` - Your client secret for your registered Twitch app
    1. `TWITCH_CHANNEL` - A default channel to use when nothing is passed to the function's `name` query parameter
+   1. `TWITTER_CONSUMER_KEY` - Your Twitter API Key
+   1. `TWITTER_CONSUMER_SECRET` - Your Twitter API Secret Key
+   1. `TWITTER_ACCESS_TOKEN_KEY` - Your Twitter Access Token (Read + Write)
+   1. `TWITTER_ACCESS_TOKEN_SECRET` - Your Twitter Access Token Secret (Read + Write)
 
-## How To Deploy
+## How To Deploy - Local
 
 1. Make sure all of your Azure resources are created and configured. See `Creating Azure Resources`.
 1. Install dependencies with `npm install` from the `azure-function` folder
