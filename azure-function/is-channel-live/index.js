@@ -7,10 +7,10 @@ module.exports = async function (context, req) {
     const twitchTasks = new TwitchTasks(clientId, clientSecret);
 
     const channelName = (req.query.name || process.env.TWITCH_CHANNEL);
-    if (channelName === undefined || channelName === "") {
+    if (channelName === undefined || channelName === '') {
         context.res = {
             status: 400,
-            body: "No channel name was passed to the function. Set the [TWITCH_CHANNEL] Application Settings"
+            body: 'No channel name was passed to the function. Pass in a value to the [name] query parameter.'
         };
 
         context.done();
@@ -21,13 +21,13 @@ module.exports = async function (context, req) {
     if (isChannelLive) {
         context.res = {
             status: 200,
-            body: "The channel [" + channelName + "] is live!"
+            body: `The channel [${channelName}] is live!`
         };
         context.done();
     } else {
         context.res = {
             status: 200,
-            body: "The channel [" + channelName + "] is offline."
+            body: `The channel [${channelName}] is offline!`
         };
         context.done();
     }

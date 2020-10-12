@@ -11,7 +11,7 @@ module.exports = async function (context, req) {
     if (channelName === undefined || channelName === "") {
         context.res = {
             status: 400,
-            body: "No channel name was passed to the function. Set the [TWITCH_CHANNEL] Application Settings"
+            body: 'No channel name was passed to the function. Set the [TWITCH_CHANNEL] Application Settings.'
         };
 
         context.done();
@@ -28,26 +28,34 @@ module.exports = async function (context, req) {
 
         const streamStartTime = await twitchTasks.getStreamStartTime(channelName);
         const streamStartTimeFormatted = new Date(streamStartTime).toLocaleString();
-        const twitterStatus = `${channelName} started a new stream, check it out at https://www.twitch.tv/${channelName}! Stream start time: ${streamStartTimeFormatted}`
+        const twitterStatus = `${channelName} started a new stream, check it out at https://www.twitch.tv/${channelName}! Stream start time (UTC): ${streamStartTimeFormatted}`
 
-        await twitterTasks.updateStatus(twitterStatus);
+        const tweetSuccess = await twitterTasks.updateStatus(twitterStatus);
 
-        context.res = {
-            status: 200,
-            body: "Fresh stream detected - Sending out a tweet!"
-        };
-        context.done();
+        if (tweetSuccess) {
+            context.res = {
+                status: 200,
+                body: `Fresh stream detected for [${channelName}] - Sent out a tweet!`
+            };
+            context.done();
+        } else {
+            context.res = {
+                status: 500,
+                body: `Fresh stream detected for [${channelName}] - Error sending out a tweet!`
+            };
+            context.done();
+        }
     } else {
         context.res = {
             status: 200,
-            body: "Stale stream detected - No tweet will be sent."
+            body: `No stream detected for [${channelName}] - No tweet will be sent.`
         };
         context.done();
     }
 
     context.res = {
         status: 200,
-        body: "No stream detected for channel [" + channelName + "]."
+        body: `No stream detected for channel [${channelName}].`
     };
     context.done();
 };

@@ -20,9 +20,10 @@ class TwitterTasks {
 
         if (response !== undefined) {
             console.log(`Successfully updated Twitter status!`);
-        } else {
-            console.log(`Failed to update Twitter status!`);
+            return true;
         }
+        console.log(`Failed to update Twitter status!`);
+        return false;
     }
 }
 

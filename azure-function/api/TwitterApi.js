@@ -34,6 +34,8 @@ class TwitterApi {
                     resolve(res.id);
                 }).catch(function (err) {
                     console.error(`Error [${JSON.stringify(err)}]`);
+                }).then(function (res) {
+                    resolve(undefined);
                 })
         })
     }
